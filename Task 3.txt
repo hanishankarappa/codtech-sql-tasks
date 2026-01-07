@@ -1,0 +1,388 @@
+DATABASE MIGRATION
+
+mysql> show DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| school             |
+| sys                |
++--------------------+
+5 rows in set (0.43 sec)
+
+mysql> use school
+Database changed
+mysql> show tables;
++------------------+
+| Tables_in_school |
++------------------+
+| scores           |
+| student_scores   |
+| students06       |
++------------------+
+3 rows in set (0.04 sec)
+
+mysql> DESCRIBE students06;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| students_id | int         | NO   | PRI | NULL    |       |
+| name        | varchar(50) | YES  |     | NULL    |       |
+| class       | int         | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+3 rows in set (0.02 sec)
+
+mysql> DESCRIBE student_scores;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| student_id | int         | YES  |     | NULL    |       |
+| name       | varchar(50) | YES  |     | NULL    |       |
+| class      | int         | YES  |     | NULL    |       |
+| subject    | varchar(30) | YES  |     | NULL    |       |
+| score      | int         | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> DESCRIBE scores;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| score_id    | int         | NO   | PRI | NULL    |       |
+| students_id | int         | YES  | MUL | NULL    |       |
+| subject     | varchar(30) | YES  |     | NULL    |       |
+| score       | int         | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> exit;
+Bye
+E:\Program Files\PostgreSQL\18\bin>psql -U postgres
+Password for user postgres:
+
+psql (18.1)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \list
+                                                                    List of databases
+   Name    |  Owner   | Encoding | Locale Provider |          Collate           |           Ctype            | Locale | ICU Rules |   Access privileges
+-----------+----------+----------+-----------------+----------------------------+----------------------------+--------+-----------+-----------------------
+ postgres  | postgres | UTF8     | libc            | English_United States.1252 | English_United States.1252 |        |           |
+ target_db | postgres | UTF8     | libc            | English_United States.1252 | English_United States.1252 |        |           |
+ template0 | postgres | UTF8     | libc            | English_United States.1252 | English_United States.1252 |        |           | =c/postgres          +
+           |          |          |                 |                            |                            |        |           | postgres=CTc/postgres
+ template1 | postgres | UTF8     | libc            | English_United States.1252 | English_United States.1252 |        |           | =c/postgres          +
+           |          |          |                 |                            |                            |        |           | postgres=CTc/postgres
+(4 rows)
+
+postgres=# \c target_db
+You are now connected to database "target_db" as user "postgres".
+
+target_db=# \dt
+Did not find any tables.
+target_db=# \q
+
+E:\Program Files\PostgreSQL\18\bin>dir
+ Volume in drive E is New Volume
+ Volume Serial Number is 1CE0-5CC9
+
+ Directory of E:\Program Files\PostgreSQL\18\bin
+
+12/31/2025  04:02 PM    <DIR>          .
+12/31/2025  04:20 PM    <DIR>          ..
+12/12/2025  02:48 PM           134,144 clusterdb.exe
+12/12/2025  02:48 PM           132,096 createdb.exe
+12/12/2025  02:48 PM           137,216 createuser.exe
+12/12/2025  02:48 PM           131,072 dropdb.exe
+12/12/2025  02:48 PM           130,560 dropuser.exe
+12/12/2025  02:48 PM           929,280 ecpg.exe
+12/12/2025  02:48 PM        31,898,624 icudt77.dll
+12/12/2025  02:48 PM         3,585,024 icuin77.dll
+12/12/2025  02:48 PM            62,976 icuio77.dll
+12/12/2025  02:48 PM           381,952 icutu77.dll
+12/12/2025  02:48 PM         2,552,320 icuuc77.dll
+12/12/2025  02:48 PM           243,712 initdb.exe
+12/12/2025  02:48 PM         5,694,464 libcrypto-3-x64.dll
+12/12/2025  02:48 PM           663,552 libcurl.dll
+12/12/2025  02:48 PM            21,778 libcurl.lib
+12/12/2025  02:48 PM           101,888 libecpg.dll
+12/12/2025  02:48 PM            25,088 libecpg_compat.dll
+12/12/2025  02:48 PM         1,436,423 libiconv-2.dll
+12/12/2025  02:48 PM           475,769 libintl-9.dll
+12/12/2025  02:48 PM           128,000 liblz4.dll
+12/12/2025  02:48 PM            85,504 libpgtypes.dll
+12/12/2025  02:48 PM           381,952 libpq.dll
+12/12/2025  02:48 PM         1,312,256 libssl-3-x64.dll
+12/12/2025  02:48 PM            52,736 libwinpthread-1.dll
+12/12/2025  02:48 PM         1,228,800 libxml2.dll
+12/12/2025  02:48 PM           414,208 libxslt.dll
+12/12/2025  02:48 PM           728,576 libzstd.dll
+12/12/2025  02:48 PM            82,944 oid2name.exe
+12/12/2025  02:48 PM           256,000 pgbench.exe
+12/12/2025  02:48 PM           162,816 pg_amcheck.exe
+12/12/2025  02:48 PM            93,696 pg_archivecleanup.exe
+12/12/2025  02:48 PM           295,424 pg_basebackup.exe
+12/12/2025  02:48 PM           129,536 pg_checksums.exe
+12/12/2025  02:48 PM           200,192 pg_combinebackup.exe
+12/12/2025  02:48 PM            88,576 pg_config.exe
+12/12/2025  02:48 PM           105,472 pg_controldata.exe
+12/12/2025  02:48 PM           175,104 pg_createsubscriber.exe
+12/12/2025  02:48 PM           130,560 pg_ctl.exe
+12/12/2025  02:48 PM           627,712 pg_dump.exe
+12/12/2025  02:48 PM           393,728 pg_dumpall.exe
+12/12/2025  02:48 PM            91,136 pg_isready.exe
+12/12/2025  02:48 PM           224,768 pg_receivewal.exe
+12/12/2025  02:48 PM           111,104 pg_recvlogical.exe
+12/12/2025  02:48 PM           123,392 pg_resetwal.exe
+12/12/2025  02:48 PM           375,296 pg_restore.exe
+12/12/2025  02:48 PM           227,840 pg_rewind.exe
+12/12/2025  02:48 PM            98,304 pg_test_fsync.exe
+12/12/2025  02:48 PM            87,552 pg_test_timing.exe
+12/12/2025  02:48 PM           267,776 pg_upgrade.exe
+12/12/2025  02:48 PM           249,344 pg_verifybackup.exe
+12/12/2025  02:48 PM           163,328 pg_waldump.exe
+12/12/2025  02:48 PM           114,176 pg_walsummary.exe
+12/12/2025  02:48 PM        10,223,104 postgres.exe
+12/12/2025  02:48 PM           647,680 psql.exe
+12/12/2025  02:48 PM           145,408 reindexdb.exe
+12/12/2025  02:48 PM           435,984 stackbuilder.exe
+12/12/2025  02:48 PM            12,800 testplug.dll
+12/12/2025  02:48 PM           151,040 vacuumdb.exe
+12/12/2025  02:48 PM            81,408 vacuumlo.exe
+12/12/2025  02:48 PM           257,536 wxbase328u_net_vc_x64_custom.dll
+12/12/2025  02:48 PM         2,963,968 wxbase328u_vc_x64_custom.dll
+12/12/2025  02:48 PM           193,024 wxbase328u_xml_vc_x64_custom.dll
+12/12/2025  02:48 PM            11,264 wxmsw328u_adv_vc_x64_custom.dll
+12/12/2025  02:48 PM           594,944 wxmsw328u_aui_vc_x64_custom.dll
+12/12/2025  02:48 PM         8,295,424 wxmsw328u_core_vc_x64_custom.dll
+12/12/2025  02:48 PM           708,096 wxmsw328u_html_vc_x64_custom.dll
+12/12/2025  02:48 PM           886,784 wxmsw328u_xrc_vc_x64_custom.dll
+12/12/2025  02:48 PM            91,136 zlib1.dll
+              68 File(s)     83,645,346 bytes
+               2 Dir(s)  736,478,105,600 bytes free
+			   
+
+C:\Users\DELL>mysqldump -u root -p --no-data source_db > school.sql
+Enter password: *********
+mysqldump: Got error: 1049: Unknown database 'source_db' when selecting the database
+
+C:\Users\DELL>dir school.sql
+ Volume in drive C has no label.
+ Volume Serial Number is 8E9E-47F3
+
+ Directory of C:\Users\DELL
+
+01/01/2026  08:09 PM               798 school.sql
+               1 File(s)            798 bytes
+               0 Dir(s)  39,004,319,744 bytes free
+
+
+C:\Users\DELL>"E:\Program Files\PostgreSQL\18\bin\psql.exe" -U postgres
+Password for user postgres:
+
+psql (18.1)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+			   
+postgres=# SELECT current_user;
+ current_user
+--------------
+ postgres
+(1 row)
+
+postgres=# \c target_db
+You are now connected to database "target_db" as user "postgres".
+
+target_db=# SELECT current_database(), current_user;
+ current_database | current_user
+------------------+--------------
+ target_db        | postgres
+(1 row)
+
+target_db=# CREATE TABLE students (
+target_db(#   students_id INT PRIMARY KEY,
+target_db(#   name VARCHAR(50),
+target_db(#   class INT
+target_db(# );
+CREATE TABLE
+target_db=# CREATE TABLE scores (
+target_db(#   score_id INT PRIMARY KEY,
+target_db(#   students_id INT,
+target_db(#   subject VARCHAR(30),
+target_db(#   score INT,
+target_db(#   CONSTRAINT fk_students
+target_db(#     FOREIGN KEY (students_id)
+target_db(#     REFERENCES students(students_id)
+target_db(# );
+CREATE TABLE
+target_db=# \dt
+            List of tables
+ Schema |   Name   | Type  |  Owner
+--------+----------+-------+----------
+ public | scores   | table | postgres
+ public | students | table | postgres
+(2 rows)
+
+target_db=# INSERT INTO students VALUES
+target_db-# (1, 'Bob', 6),
+target_db-# (2, 'Alvin', 7),
+target_db-# (3, 'Kalix', 4);
+INSERT 0 3
+
+target_db=# INSERT INTO scores VALUES
+target_db-# (1, 1, 'Maths', 86),
+target_db-# (2, 2, 'Science', 79),
+target_db-# (3, 3, 'English', 72);
+INSERT 0 3
+target_db=# select * from students;
+ students_id | name  | class
+-------------+-------+-------
+           1 | Bob   |     6
+           2 | Alvin |     7
+           3 | Kalix |     4
+(3 rows)
+
+
+target_db=# select * from scores;
+ score_id | students_id | subject | score
+----------+-------------+---------+-------
+        1 |           1 | Maths   |    86
+        2 |           2 | Science |    79
+        3 |           3 | English |    72
+(3 rows)
+
+target_db=# \q
+
+C:\Users\DELL>"E:\Program Files\PostgreSQL\18\bin\psql.exe" -U postgres -d target_db -f C:\Users\DELL\school.sql
+Password for user postgres:
+
+psql:C:/Users/DELL/school.sql:23: NOTICE:  table "students06" does not exist, skipping
+DROP TABLE
+CREATE TABLE
+DROP TABLE
+CREATE TABLE
+psql:C:/Users/DELL/school.sql:42: NOTICE:  table "student_scores" does not exist, skipping
+DROP TABLE
+CREATE TABLE
+
+C:\Users\DELL>"E:\Program Files\PostgreSQL\18\bin\psql.exe" -U postgres
+Password for user postgres:
+
+psql (18.1)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c target_db
+You are now connected to database "target_db" as user "postgres".
+target_db=# \dt
+               List of tables
+ Schema |      Name      | Type  |  Owner
+--------+----------------+-------+----------
+ public | scores         | table | postgres
+ public | student_scores | table | postgres
+ public | students       | table | postgres
+ public | students06     | table | postgres
+(4 rows)
+
+target_db=# SELECT COUNT(*) FROM students;
+ count
+-------
+     3
+(1 row)
+
+
+target_db=# SELECT COUNT(*) FROM scores;
+ count
+-------
+     0
+(1 row)
+
+
+target_db=# SELECT * FROM students;
+ students_id | name  | class
+-------------+-------+-------
+           1 | Bob   |     6
+           2 | Alvin |     7
+           3 | Kalix |     4
+(3 rows)
+
+target_db=# SELECT s.name, sc.subject, sc.score
+target_db-# FROM students s
+target_db-# JOIN scores sc
+target_db-# ON s.students_id = sc.students_id;
+ name | subject | score
+------+---------+-------
+(0 rows)
+
+
+target_db=# \d students
+                       Table "public.students"
+   Column    |         Type          | Collation | Nullable | Default
+-------------+-----------------------+-----------+----------+---------
+ students_id | integer               |           | not null |
+ name        | character varying(50) |           |          |
+ class       | integer               |           |          |
+Indexes:
+    "students_pkey" PRIMARY KEY, btree (students_id)
+
+
+target_db=# \d scores
+                                         Table "public.scores"
+   Column    |         Type          | Collation | Nullable |                 Default
+-------------+-----------------------+-----------+----------+------------------------------------------
+ score_id    | integer               |           | not null | nextval('scores_score_id_seq'::regclass)
+ students_id | integer               |           |          |
+ subject     | character varying(30) |           |          |
+ score       | integer               |           |          |
+Indexes:
+    "scores_pkey" PRIMARY KEY, btree (score_id)
+Foreign-key constraints:
+    "fk_students" FOREIGN KEY (students_id) REFERENCES students06(students_id)
+
+target_db=# ALTER TABLE scores
+target_db-# DROP CONSTRAINT fk_students;
+ALTER TABLE
+
+target_db=# ALTER TABLE scores
+target_db-# ADD CONSTRAINT fk_students
+target_db-# FOREIGN KEY (students_id)
+target_db-# REFERENCES students(students_id);
+ALTER TABLE
+
+target_db=# SELECT COUNT(*) FROM scores;
+ count
+-------
+     0
+(1 row)
+
+target_db=# SELECT * FROM scores;
+ score_id | students_id | subject | score
+----------+-------------+---------+-------
+        1 |           1 | Maths   |    86
+        2 |           2 | Science |    79
+        3 |           3 | English |    72
+(3 rows)
+
+
+target_db=# SELECT s.name, sc.subject, sc.score
+target_db-# FROM students s
+target_db-# JOIN scores sc
+target_db-# ON s.students_id = sc.students_id;
+ name  | subject | score
+-------+---------+-------
+ Bob   | Maths   |    86
+ Alvin | Science |    79
+ Kalix | English |    72
+(3 rows)
+
+
+

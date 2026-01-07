@@ -1,0 +1,95 @@
+DATABASE BACKUP AND RECOVERY
+
+mysql> USE internship_db;
+ERROR 1049 (42000): Unknown database 'internship_db'
+mysql> CREATE DATABASE internship_db;
+Query OK, 1 row affected (0.17 sec)
+
+mysql> USE internship_db;
+Database changed
+mysql> CREATE TABLE students (
+    ->     id INT PRIMARY KEY,
+    ->     name VARCHAR(50),
+    ->     age INT
+    -> );
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> INSERT INTO students VALUES (1, 'Rahul', 21), (2, 'Anita', 22),(3,'Sanjay',22);
+Query OK, 3 rows affected (0.07 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM students;
++----+--------+------+
+| id | name   | age  |
++----+--------+------+
+|  1 | Rahul  |   21 |
+|  2 | Anita  |   22 |
+|  3 | Sanjay |   22 |
++----+--------+------+
+3 rows in set (0.01 sec)
+
+mysql> exit;
+Bye
+
+C:\Users\DELL>mysqldump -u root -p internship_db > internship_db_backup.sql
+Enter password: *********
+
+C:\Users\DELL>mysql -u root -p
+Enter password: *********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 19
+Server version: 8.0.44 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> DROP DATABASE internship_db;
+Query OK, 1 row affected (0.19 sec)
+
+mysql> CREATE DATABASE internship_db;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> exit;
+Bye
+
+C:\Users\DELL>mysql -u root -p internship_db < internship_db_backup.sql
+Enter password: *********
+
+C:\Users\DELL>mysql -u root -p
+Enter password: *********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 21
+Server version: 8.0.44 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> USE internship_db;
+Database changed
+mysql> SHOW TABLES;
++-------------------------+
+| Tables_in_internship_db |
++-------------------------+
+| students                |
++-------------------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT * FROM students;
++----+--------+------+
+| id | name   | age  |
++----+--------+------+
+|  1 | Rahul  |   21 |
+|  2 | Anita  |   22 |
+|  3 | Sanjay |   22 |
++----+--------+------+
+3 rows in set (0.00 sec)

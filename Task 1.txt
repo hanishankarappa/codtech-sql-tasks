@@ -1,0 +1,80 @@
+JOINS PRACTICE
+
+#Creating database
+mysql> create DATABASE school;
+Query OK, 1 row affected (1.09 sec)
+mysql> USE school;
+Database changed
+
+#student table creation
+mysql> create table students06 (students_id INT PRIMARY KEY,name VARCHAR(50),class INT);
+Query OK, 0 rows affected (1.92 sec)
+
+#inserting values
+mysql> INSERT INTO students06 VALUES(01,'bob',6);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> INSERT INTO students06 VALUES(02,'alvin',7);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO students06 VALUES(03,'kalix',4);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> INSERT INTO students06 VALUES(04,'cean',5);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from students06;
++-------------+-------+-------+
+| students_id | name  | class |
++-------------+-------+-------+
+|           1 | bob   |     6 |
+|           2 | alvin |     7 |
+|           3 | kalix |     4 |
+|           4 | cean  |     5 |
++-------------+-------+-------+
+4 rows in set (0.00 sec)
+
+#Creating scores table
+mysql>  create table scores(score_id INT PRIMARY KEY,students_id INT,subject VARCHAR(30),score INT,FOREIGN KEY(students_id) REFERENCES students06(students_id));
+Query OK, 0 rows affected (0.26 sec)
+
+#inserting values
+mysql> insert into scores VALUES(1,1,'maths',86);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into scores VALUES(5,2,'science',79);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into scores VALUES(2,3,'english',93);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into scores VALUES(9,4,'social',66);
+Query OK, 1 row affected (0.15 sec)
+
+mysql> select * from scores
+    -> ;
++----------+-------------+---------+-------+
+| score_id | students_id | subject | score |
++----------+-------------+---------+-------+
+|        1 |           1 | maths   |    86 |
+|        2 |           3 | english |    93 |
+|        5 |           2 | science |    79 |
+|        9 |           4 | social  |    66 |
++----------+-------------+---------+-------+
+4 rows in set (0.02 sec)
+
+#Inner join
+mysql> select s.students_id,s.name,s.class,sc.subject,sc.score
+    -> FROM students06 s
+    -> INNER JOIN scores sc
+    -> ON s.students_id = sc.students_id;
++-------------+-------+-------+---------+-------+
+| students_id | name  | class | subject | score |
++-------------+-------+-------+---------+-------+
+|           1 | bob   |     6 | maths   |    86 |
+|           2 | alvin |     7 | science |    79 |
+|           3 | kalix |     4 | english |    93 |
+|           4 | cean  |     5 | social  |    66 |
++-------------+-------+-------+---------+-------+
+4 rows in set (0.01 sec)
+

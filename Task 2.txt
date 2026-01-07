@@ -1,0 +1,136 @@
+DATA ANALYSIS WITH COMPLEX QUERIES
+
+#Table creation
+mysql> create table student_scores (student_id INT, name VARCHAR(50),class INT,subject VARCHAR(30),score INT);
+Query OK, 0 rows affected (0.46 sec)
+
+#Insertion
+mysql> insert into student_scores VALUES (1,'alvin',8,'maths',98);
+Query OK, 1 row affected (0.61 sec)
+
+mysql> insert into student_scores VALUES (2,'keifer',9,'english',86);
+Query OK, 1 row affected (0.11 sec)
+
+mysql> insert into student_scores VALUES (3,'cean',8,'science',65);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into student_scores VALUES (4,'bonvir',8,'maths',79);
+Query OK, 1 row affected (0.13 sec)
+
+mysql> insert into student_scores VALUES (5,'navi',9,'maths',99);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_scores VALUES (6,'bob',8,'science',77);
+Query OK, 1 row affected (0.12 sec)
+
+mysql> select * from student_scores;
++------------+--------+-------+---------+-------+
+| student_id | name   | class | subject | score |
++------------+--------+-------+---------+-------+
+|          1 | alvin  |     8 | maths   |    98 |
+|          2 | keifer |     9 | english |    86 |
+|          3 | cean   |     8 | science |    65 |
+|          4 | bonvir |     8 | maths   |    79 |
+|          5 | navi   |     9 | maths   |    99 |
+|          6 | bob    |     8 | science |    77 |
++------------+--------+-------+---------+-------+
+6 rows in set (0.05 sec)
+
+#Using a CTE(Common Table Expression) to Find Average Score per Student
+mysql> WITH avg_scores AS (
+    -> select student_id,name,AVG(score) AS avg_score
+    -> FROM student_scores
+    -> GROUP BY student_id,name)
+    -> select * from avg_scores;
++------------+--------+-----------+
+| student_id | name   | avg_score |
++------------+--------+-----------+
+|          1 | alvin  |   98.0000 |
+|          2 | keifer |   86.0000 |
+|          3 | cean   |   65.0000 |
+|          4 | bonvir |   79.0000 |
+|          5 | navi   |   99.0000 |
+|          6 | bob    |   77.0000 |
++------------+--------+-----------+
+6 rows in set (0.06 sec)
+
+#Subquery to Find Students Above Class Average
+mysql> select * from student_scores s
+    -> where score >
+    -> (
+    -> select AVG(score)
+    -> FROM student_scores
+    -> WHERE class=s.class
+    -> );
++------------+-------+-------+---------+-------+
+| student_id | name  | class | subject | score |
++------------+-------+-------+---------+-------+
+|          1 | alvin |     8 | maths   |    98 |
+|          5 | navi  |     9 | maths   |    99 |
++------------+-------+-------+---------+-------+
+2 rows in set (0.45 sec)
+
+#Window Function (RANK) to Rank Students by Subject
+mysql> SELECT
+    -> name,
+    -> subject,
+    -> score,
+    -> RANK() OVER(PARTITION BY subject ORDER BY score DESC) AS subject_rank
+    -> FROM student_scores;
++--------+---------+-------+--------------+
+| name   | subject | score | subject_rank |
++--------+---------+-------+--------------+
+| keifer | english |    86 |            1 |
+| navi   | maths   |    99 |            1 |
+| alvin  | maths   |    98 |            2 |
+| bonvir | maths   |    79 |            3 |
+| bob    | science |    77 |            1 |
+| cean   | science |    65 |            2 |
++--------+---------+-------+--------------+
+6 rows in set (0.03 sec)
+
+#Window Function (AVG OVER) to Identify Trends
+mysql> SELECT
+    -> name,
+    -> class,
+    -> subject,
+    -> score,
+    -> AVG(score) OVER (PARTITION BY class) AS class_avg
+    -> FROM student_scores;
++--------+-------+---------+-------+-----------+
+| name   | class | subject | score | class_avg |
++--------+-------+---------+-------+-----------+
+| alvin  |     8 | maths   |    98 |   79.7500 |
+| cean   |     8 | science |    65 |   79.7500 |
+| bonvir |     8 | maths   |    79 |   79.7500 |
+| bob    |     8 | science |    77 |   79.7500 |
+| keifer |     9 | english |    86 |   92.5000 |
+| navi   |     9 | maths   |    99 |   92.5000 |
++--------+-------+---------+-------+-----------+
+6 rows in set (0.01 sec)
+
+#Combined CTE + Window Function for Top Performers
+mysql> WITH ranked_students AS(
+    -> SELECT
+    -> name,
+    -> class,
+    -> subject,
+    -> score,
+    -> DENSE_RANK() OVER (PARTITION BY class ORDER BY score DESC) AS rank_in_class
+    -> FROM student_scores
+    -> )
+    -> select *
+    -> FROM ranked_students
+    -> WHERE rank_in_class<=2;
++--------+-------+---------+-------+---------------+
+| name   | class | subject | score | rank_in_class |
++--------+-------+---------+-------+---------------+
+| alvin  |     8 | maths   |    98 |             1 |
+| bonvir |     8 | maths   |    79 |             2 |
+| navi   |     9 | maths   |    99 |             1 |
+| keifer |     9 | english |    86 |             2 |
++--------+-------+---------+-------+---------------+
+4 rows in set (0.01 sec)
+
+
+
